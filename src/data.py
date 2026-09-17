@@ -10,7 +10,19 @@ class EnemyType(TypedDict):
 
 ENEMIES: dict[str, EnemyType] = {
     "fairy": {
-        "texture": "enemy1_texture",
+        "texture": "blue_fairy",
+        "speed": 200,
+        "health": 3,
+        "emitter": "fork",
+    },
+    "fairy2": {
+        "texture": "red_fairy",
+        "speed": 200,
+        "health": 6,
+        "emitter": "shotgun",
+    },
+    "fairy3": {
+        "texture": "green_fairy",
         "speed": 200,
         "health": 3,
         "emitter": "fork",

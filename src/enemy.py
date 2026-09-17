@@ -12,7 +12,7 @@ from src.bullet_emitter import BulletEmitter
 
 class Enemy(GameObject):
     def __init__(self, enemy: EnemyType, emitter: BulletEmitter):
-        super().__init__(Sprite(AssetStore.get(enemy["texture"]), 3), 12)
+        super().__init__(Sprite(AssetStore.get(enemy["texture"]), 3), 16)
         self.speed = enemy["speed"]
         self.health = enemy["health"]
         self.hit_frames = 0.0

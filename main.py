@@ -36,8 +36,11 @@ def load_assets():
     AssetStore.load_texture("player3", "player3.png")
     AssetStore.load_texture("player4", "player4.png")
 
+    AssetStore.load_texture("blue_fairy", "blue_fairy.png")
+    AssetStore.load_texture("red_fairy", "red_fairy.png")
+    AssetStore.load_texture("green_fairy", "green_fairy.png")
+
     AssetStore.load_texture("bg1_texture", "tile1.png")
-    AssetStore.load_texture("enemy1_texture", "enemy2.png")
     AssetStore.load_texture("bullet", "red_bullet.png")
     AssetStore.load_texture("player_bullet", "plr_bullet.png")
     AssetStore.load_texture("bonus", "bonus.png")

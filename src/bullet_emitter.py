@@ -7,6 +7,9 @@ from src.sprite import Sprite
 from src.asset_store import AssetStore
 
 
+BULLET_RADIUS = 6
+
+
 class BulletEmitter(ABC):
     def __init__(self, bullets: list[Bullet], texture: str, emit_cooldown: float):
         self.bullets = bullets
@@ -38,7 +41,7 @@ class EmptyEmitter(BulletEmitter):
 class SingleEmitter(BulletEmitter):
     def emit(self):
         direction = rl.Vector2(0, 1)
-        bullet = Bullet(Sprite(AssetStore.get(self.texture), 1), direction, 450, 6)
+        bullet = Bullet(Sprite(AssetStore.get(self.texture), 1), direction, 450, BULLET_RADIUS)
         bullet.position.x = self.position.x
         bullet.position.y = self.position.y
         self.bullets.append(bullet)
@@ -50,33 +53,26 @@ class ForkEmitter(BulletEmitter):
         self.spawn_bullet(rl.Vector2(-0.5, 1))
 
     def spawn_bullet(self, direction):
-        bullet = Bullet(Sprite(AssetStore.get(self.texture), 1), rl.vector2_normalize(direction), 450, 6)
+        bullet = Bullet(Sprite(AssetStore.get(self.texture), 1), rl.vector2_normalize(direction), 450, BULLET_RADIUS)
         bullet.position.x = self.position.x
         bullet.position.y = self.position.y
         self.bullets.append(bullet)
 
 
-# class Shotgun(BulletEmitter):
-#     def __init__(self, x: float, y: float, texture: rl.Texture):
-#         super().__init__(x, y, texture)
-#         self.emit_cooldown: float = 0
+class ShotgunEmitter(BulletEmitter):
+    def __init__(self, bullets, texture, cd):
+        super().__init__(bullets, texture, cd)
 
-#     def update(self, dt):
-#         if self.emit_cooldown <= 0:
-#             for _ in range(50):
-#                 dx = random.uniform(-1, 1)
-#                 dy = random.uniform(-1, 1)
-#                 direction = rl.Vector2(dx, dy)
-#                 bullet = Bullet(Sprite(self.texture), direction, 400, 5)
-#                 bullet.position.x = self.position.x
-#                 bullet.position.y = self.position.y
-#                 self.bullets.append(bullet)
-
-#             self.emit_cooldown = 1
-
-#         self.emit_cooldown -= 1 * dt
-
-#         super().update(dt)
+    def emit(self):
+        for _ in range(20):
+            dx = random.uniform(-1, 1)
+            dy = random.uniform(-1, 1)
+            direction = rl.vector2_normalize(rl.Vector2(dx, dy))
+            speed = random.randint(200, 300)
+            bullet = Bullet(Sprite(AssetStore.get(self.texture)), direction, speed, BULLET_RADIUS)
+            bullet.position.x = self.position.x
+            bullet.position.y = self.position.y
+            self.bullets.append(bullet)
 
 
 # class CircleEmitter(BulletEmitter):
@@ -94,7 +90,7 @@ class ForkEmitter(BulletEmitter):
 #                     angle = math.radians((360 / amount) * i)
 #                     direction = rl.vector2_normalize(rl.vector2_rotate(start_v, angle))
 
-#                     bullet = Bullet(Sprite(self.texture), direction, 200 + 50 * x, 5)
+#                     bullet = Bullet(Sprite(self.texture), direction, 200 + 50 * x, BULLET_RADIUS)
 #                     bullet.position.x = self.position.x
 #                     bullet.position.y = self.position.y
 #                     self.bullets.append(bullet)
@@ -132,7 +128,7 @@ class ForkEmitter(BulletEmitter):
 #     def spawn_bullet(self, speed):
 #         angle = math.radians((360 / self.amount) * self.i)
 #         direction = rl.vector2_normalize(rl.vector2_rotate(self.start_v, angle))
-#         bullet = Bullet(Sprite(self.texture), direction, speed, 5)
+#         bullet = Bullet(Sprite(self.texture), direction, speed, BULLET_RADIUS)
 #         bullet.position.x = self.position.x
 #         bullet.position.y = self.position.y
 #         self.bullets.append(bullet)
@@ -155,7 +151,7 @@ class ForkEmitter(BulletEmitter):
 #     def spawn_bullet(self):
 #         direction = rl.Vector2(random.uniform(-1, 1), random.uniform(-1, 1))
 #         speed = random.randint(550, 590)
-#         bullet = Bullet(Sprite(self.texture), direction, speed, 5)
+#         bullet = Bullet(Sprite(self.texture), direction, speed, BULLET_RADIUS)
 #         bullet.position.x = self.position.x
 #         bullet.position.y = self.position.y
 #         self.bullets.append(bullet)
