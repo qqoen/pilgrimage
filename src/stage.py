@@ -126,7 +126,6 @@ class Stage1(Stage):
     def __init__(self):
         super().__init__()
 
-
         self.tl.add(1, lambda: self.spawn("fairy", lane=1))
         self.tl.add(2, lambda: self.spawn("fairy", lane=2))
         self.tl.add(3, lambda: self.spawn("fairy", lane=3))
@@ -154,3 +153,7 @@ class Stage1(Stage):
         self.tl.add(23, lambda: self.spawn("fairy", lane=5))
         self.tl.add(23.5, lambda: self.spawn("fairy", lane=4))
         self.tl.add(24, lambda: self.spawn("fairy", lane=5))
+
+        self.tl.add(26, lambda: self.spawn("fairy2", lane=5))
+        self.tl.add(27, lambda: self.spawn("fairy2", lane=1))
+        self.tl.add(28, lambda: self.spawn("fairy2", lane=3))

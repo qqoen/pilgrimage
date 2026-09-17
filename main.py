@@ -13,6 +13,8 @@ def main():
     rl.init_window(WINDOW_WIDTH, WINDOW_HEIGHT, "Pilgrimage")
     rl.init_audio_device()
 
+    rl.hide_cursor()
+
     load_assets()
 
     game = Game()

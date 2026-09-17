@@ -41,7 +41,8 @@ class Enemy(GameObject):
         if self.position.y >= AREA_HEIGHT:
             self.is_destroyed = True
 
-        self.emitter.update(dt)
+        if 0 < self.position.y < AREA_HEIGHT:
+            self.emitter.update(dt)
 
     def draw(self):
         super().draw()
