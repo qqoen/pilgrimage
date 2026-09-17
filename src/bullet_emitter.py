@@ -4,10 +4,11 @@ import math
 from abc import ABC, abstractmethod
 from src.bullet import Bullet
 from src.sprite import Sprite
+from src.asset_store import AssetStore
 
 
 class BulletEmitter(ABC):
-    def __init__(self, bullets: list[Bullet], texture: rl.Texture, emit_cooldown: float):
+    def __init__(self, bullets: list[Bullet], texture: str, emit_cooldown: float):
         self.bullets = bullets
         self.position = rl.Vector2()
         self.texture = texture
@@ -26,10 +27,18 @@ class BulletEmitter(ABC):
         pass
 
 
+class EmptyEmitter(BulletEmitter):
+    def __init__(self):
+        super().__init__([], "", 0)
+
+    def emit(self):
+        pass
+
+
 class SingleEmitter(BulletEmitter):
     def emit(self):
         direction = rl.Vector2(0, 1)
-        bullet = Bullet(Sprite(self.texture, 1), direction, 450, 6)
+        bullet = Bullet(Sprite(AssetStore.get(self.texture), 1), direction, 450, 6)
         bullet.position.x = self.position.x
         bullet.position.y = self.position.y
         self.bullets.append(bullet)
@@ -41,7 +50,7 @@ class ForkEmitter(BulletEmitter):
         self.spawn_bullet(rl.Vector2(-0.5, 1))
 
     def spawn_bullet(self, direction):
-        bullet = Bullet(Sprite(self.texture, 1), rl.vector2_normalize(direction), 450, 6)
+        bullet = Bullet(Sprite(AssetStore.get(self.texture), 1), rl.vector2_normalize(direction), 450, 6)
         bullet.position.x = self.position.x
         bullet.position.y = self.position.y
         self.bullets.append(bullet)

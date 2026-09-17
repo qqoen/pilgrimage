@@ -6,14 +6,15 @@ from src.sprite import Sprite
 from src.bonus import Bonus
 from src.game_object import GameObject
 from src.constants import WINDOW_HEIGHT
+from src.data import EnemyType
 from src.bullet_emitter import BulletEmitter
 
 
 class Enemy(GameObject):
-    def __init__(self, texture: rl.Texture, speed: int, health: int, emitter: BulletEmitter):
-        super().__init__(Sprite(texture, 3), 12)
-        self.speed = speed
-        self.health = health
+    def __init__(self, enemy: EnemyType, emitter: BulletEmitter):
+        super().__init__(Sprite(AssetStore.get(enemy["texture"]), 3), 12)
+        self.speed = enemy["speed"]
+        self.health = enemy["health"]
         self.hit_frames = 0.0
         self.emitter = emitter
 
@@ -46,6 +47,9 @@ class Enemy(GameObject):
         super().draw()
 
     def hit(self):
+        if self.y <= 0:
+            return []
+
         self.health -= 1
         self.x += random.randint(-3, 3)
         bonuses = []

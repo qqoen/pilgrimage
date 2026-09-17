@@ -7,6 +7,7 @@ class AssetStore:
     _music_stream_keys = []
     _sound_keys = []
     _texture_keys = []
+    _font_keys = []
 
     @staticmethod
     def load_texture(key, file_name):
@@ -27,6 +28,12 @@ class AssetStore:
         AssetStore._sound_keys.append(key)
 
     @staticmethod
+    def load_font(key, file_name):
+        font = rl.load_font(os.path.join("assets", file_name))
+        AssetStore._assets[key] = font
+        AssetStore._font_keys.append(key)
+
+    @staticmethod
     def get(key):
         return AssetStore._assets[key]
 
@@ -38,4 +45,5 @@ class AssetStore:
             rl.unload_sound(AssetStore.get(key))
         for key in AssetStore._texture_keys:
             rl.unload_texture(AssetStore.get(key))
-
+        # for key in AssetStore._font_keys:
+            # rl.unload_font(key)
