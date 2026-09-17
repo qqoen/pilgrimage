@@ -1,7 +1,7 @@
 import pyray as rl
 import math
 import random
-from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH
+from src.constants import AREA_WIDTH, AREA_HEIGHT
 
 
 class ScrollingBackground:
@@ -14,7 +14,7 @@ class ScrollingBackground:
         for i, (x, y) in enumerate(self.parts):
             dy = y + self.speed * dt
 
-            if dy >= WINDOW_HEIGHT:
+            if dy >= AREA_HEIGHT:
                 dy -= self.texture.height * 2 * 2
 
             self.parts[i] = (x, dy)
@@ -29,20 +29,20 @@ class StarsBackground:
         self.stars = []
 
         for i in range(100):
-            x = random.randint(0, WINDOW_WIDTH - 1)
-            y = random.randint(0, WINDOW_HEIGHT - 1)
+            x = random.randint(0, AREA_WIDTH - 1)
+            y = random.randint(0, AREA_HEIGHT - 1)
             spd = random.randint(100, 200)
 
             self.stars.append((x, y, spd))
 
     def update(self, dt):
         for i, (x, y, spd) in enumerate(self.stars):
-            dy = y + spd * dt
+            y += spd * dt
 
-            if dy >= WINDOW_HEIGHT:
-                dy -= WINDOW_HEIGHT
+            if y >= AREA_HEIGHT:
+                y -= AREA_HEIGHT
 
-            self.stars[i] = (x, dy, spd)
+            self.stars[i] = (x, y, spd)
 
     def draw(self):
         for i, (x, y, spd) in enumerate(self.stars):
@@ -54,8 +54,8 @@ class TiledBackground:
         self.texture = texture
         self.texture_scale = 4
 
-        self.x_count = math.ceil(WINDOW_WIDTH / self.texture.width * self.texture_scale)
-        self.y_count = math.ceil(WINDOW_HEIGHT / self.texture.height * self.texture_scale) + 1
+        self.x_count = math.ceil(AREA_WIDTH / self.texture.width * self.texture_scale)
+        self.y_count = math.ceil(AREA_HEIGHT / self.texture.height * self.texture_scale) + 1
 
         self.tiles = []
         self.speed = 40
@@ -75,7 +75,7 @@ class TiledBackground:
             miny = min(miny, y)
             dy = y + self.speed * dt
 
-            if dy >= WINDOW_HEIGHT:
+            if dy >= AREA_HEIGHT:
                 dy -= self.max_y
 
             self.tiles[i] = (x, dy)

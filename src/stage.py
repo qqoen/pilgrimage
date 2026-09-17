@@ -5,7 +5,7 @@ from src.background import ScrollingBackground
 from src.enemy import Enemy, Bonus
 from src.asset_store import AssetStore
 from src.blast import Explosion
-from src.constants import WINDOW_WIDTH, WINDOW_HEIGHT
+from src.constants import AREA_WIDTH, AREA_HEIGHT
 from src.common import update_list, draw_list
 from src.bullet import Bullet
 from src.data import ENEMIES, EnemyType
@@ -61,9 +61,9 @@ class Stage:
         self.timeline.add(2, lambda: self.spawn_enemy("fairy", 150))
         self.timeline.add(3, lambda: self.spawn_enemy("fairy", 200))
 
-        self.timeline.add(5, lambda: self.spawn_enemy("fairy", WINDOW_WIDTH - 100))
-        self.timeline.add(6, lambda: self.spawn_enemy("fairy", WINDOW_WIDTH - 150))
-        self.timeline.add(7, lambda: self.spawn_enemy("fairy", WINDOW_WIDTH - 200))
+        self.timeline.add(5, lambda: self.spawn_enemy("fairy", AREA_WIDTH - 100))
+        self.timeline.add(6, lambda: self.spawn_enemy("fairy", AREA_WIDTH - 150))
+        self.timeline.add(7, lambda: self.spawn_enemy("fairy", AREA_WIDTH - 200))
 
         self.bg = ScrollingBackground(AssetStore.get("bg2_texture"))
 
@@ -110,8 +110,8 @@ class Stage:
         self.reset_player()
 
     def reset_player(self):
-        self.player.x = WINDOW_WIDTH // 2
-        self.player.y = WINDOW_HEIGHT - self.player.height()
+        self.player.x = AREA_WIDTH // 2
+        self.player.y = AREA_HEIGHT - self.player.height()
 
     def spawn_enemy(self, type: str, x):
         enemy = Enemy(ENEMIES[type], self.create_emitter(ENEMIES[type]))

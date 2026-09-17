@@ -4,7 +4,7 @@ from src.game_object import GameObject
 from src.asset_store import AssetStore
 from src.sprite import Sprite, AnimatedSprite
 from src.bullet import Bullet
-from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH
+from src.constants import AREA_WIDTH, AREA_HEIGHT
 from src.common import approach, play_sound, draw_list, update_list
 
 
@@ -36,8 +36,8 @@ class Player(GameObject):
         dir = rl.vector2_scale(rl.vector2_normalize(dir), self.speed * dt)
         self.position = rl.vector2_add(self.position, dir)
 
-        self.position.x = rl.clamp(self.position.x, self.width() // 3, WINDOW_WIDTH - self.width() // 3)
-        self.position.y = rl.clamp(self.position.y, self.height() // 3, WINDOW_HEIGHT - self.height() // 3)
+        self.position.x = rl.clamp(self.position.x, self.width() // 3, AREA_WIDTH - self.width() // 3)
+        self.position.y = rl.clamp(self.position.y, self.height() // 3, AREA_HEIGHT - self.height() // 3)
 
         self.trail_position.x = approach(self.trail_position.x, self.position.x)
         self.trail_position.y = approach(self.trail_position.y, self.position.y)

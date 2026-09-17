@@ -5,7 +5,7 @@ from src.asset_store import AssetStore
 from src.sprite import Sprite
 from src.bonus import Bonus
 from src.game_object import GameObject
-from src.constants import WINDOW_HEIGHT
+from src.constants import AREA_HEIGHT
 from src.data import EnemyType
 from src.bullet_emitter import BulletEmitter
 
@@ -38,7 +38,7 @@ class Enemy(GameObject):
             self.sprite.tint = rl.WHITE
             self.hit_frames = 0
 
-        if self.position.y >= WINDOW_HEIGHT:
+        if self.position.y >= AREA_HEIGHT:
             self.is_destroyed = True
 
         self.emitter.update(dt)

@@ -1,13 +1,13 @@
 import pyray as rl
 import raylib
-from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH
+from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH, FPS
 from src.game import Game
 from src.common import *
 from src.asset_store import AssetStore
 
 
 def main():
-    rl.set_target_fps(60)
+    rl.set_target_fps(FPS)
     rl.set_exit_key(raylib.KEY_ESCAPE)
 
     rl.init_window(WINDOW_WIDTH, WINDOW_HEIGHT, "Pilgrimage")

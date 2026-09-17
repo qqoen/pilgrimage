@@ -1,7 +1,7 @@
 import pyray as rl
 from src.game_object import GameObject
 from src.sprite import Sprite
-from src.constants import WINDOW_WIDTH, WINDOW_HEIGHT
+from src.constants import AREA_WIDTH, AREA_HEIGHT
 
 
 class Bullet(GameObject):
@@ -14,6 +14,6 @@ class Bullet(GameObject):
         self.position.x += self.direction.x * self.speed * dt
         self.position.y += self.direction.y * self.speed * dt
 
-        if self.position.x <= -self.width() or self.position.x >= WINDOW_WIDTH + self.width()\
-            or self.position.y <= -self.height() or self.position.y >= WINDOW_HEIGHT + self.height():
+        if self.position.x <= -self.width() or self.position.x >= AREA_WIDTH + self.width()\
+            or self.position.y <= -self.height() or self.position.y >= AREA_HEIGHT + self.height():
             self.is_destroyed = True

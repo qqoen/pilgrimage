@@ -1,6 +1,7 @@
 import pyray as rl
 from src.asset_store import AssetStore
 from src.stage import Stage
+from src.constants import AREA_WIDTH, WINDOW_WIDTH, WINDOW_HEIGHT
 
 
 class Game:
@@ -18,5 +19,13 @@ class Game:
     def draw(self):
         self.stage.draw()
 
-        rl.draw_text_ex(AssetStore.get("font"), f"Score: {self.stage.score}", (8, 5), 30, 3, rl.WHITE)
-        rl.draw_text_ex(AssetStore.get("font"), f"Lives: {self.stage.player.lives}", (8, 35), 30, 3, rl.WHITE)
+        gui_x = AREA_WIDTH
+        gui_y = 0
+        gui_width = WINDOW_WIDTH - AREA_WIDTH
+        gui_height = WINDOW_HEIGHT
+        rl.draw_rectangle_v((gui_x, gui_y), (gui_width, gui_height), rl.BLACK)
+
+        rl.draw_text_ex(AssetStore.get("font"), f"Score: {self.stage.score}", (gui_x + 8, gui_y + 5), 30, 3, rl.WHITE)
+        rl.draw_text_ex(AssetStore.get("font"), f"Lives: {self.stage.player.lives}", (gui_x + 8, gui_y + 35), 30, 3, rl.WHITE)
+
+        rl.draw_text_ex(AssetStore.get("font"), f"FPS: {rl.get_fps()}", (gui_x + 8, gui_height - 30), 30, 3, rl.GRAY)
