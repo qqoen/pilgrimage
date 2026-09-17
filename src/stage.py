@@ -10,6 +10,7 @@ from src.common import update_list, draw_list
 from src.bullet import Bullet
 from src.data import ENEMIES, EnemyType
 from src.bullet_emitter import ForkEmitter, EmptyEmitter
+from src.sprite import AnimatedSprite
 
 
 class Timeline:
@@ -38,7 +39,13 @@ class Timeline:
 
 class Stage:
     def __init__(self):
-        self.player = Player()
+        player_sprite = AnimatedSprite([
+            "player1",
+            "player2",
+            "player3",
+            "player4",
+        ], 0.25, 3)
+        self.player = Player(player_sprite)
         self.reset_player()
 
         self.enemies: list[Enemy] = []
@@ -95,7 +102,7 @@ class Stage:
 
     def reset_player(self):
         self.player.x = WINDOW_WIDTH // 2
-        self.player.y = WINDOW_HEIGHT - self.player.height
+        self.player.y = WINDOW_HEIGHT - self.player.height()
 
     def spawn_enemy(self, type: str, x):
         enemy = Enemy(ENEMIES[type], self.create_emitter(ENEMIES[type]))

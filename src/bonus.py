@@ -12,6 +12,7 @@ class Bonus(GameObject):
         self.position.y = y
         self.score = score
         self.speed = -10
+        self.acceleration = 150
         self.is_destroyed = False
         self.frame_count = 0
 
@@ -22,7 +23,7 @@ class Bonus(GameObject):
             self.is_destroyed = True
 
         self.frame_count += 1
-        self.speed += 100 * dt
+        self.speed += self.acceleration * dt
 
     def pick(self):
         play_sound(AssetStore.get("pickup"))

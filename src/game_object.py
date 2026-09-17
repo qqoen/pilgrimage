@@ -1,10 +1,10 @@
 import pyray as rl
-from src.sprite import Sprite
+from src.sprite import Graphics
 from src.constants import IS_DEBUG
 
 
 class GameObject:
-    def __init__(self, sprite: Sprite, hit_radius: int):
+    def __init__(self, sprite: Graphics, hit_radius: int):
         self.sprite = sprite
         self.position = rl.Vector2(0, 0)
         self.hit_radius = hit_radius
@@ -28,7 +28,7 @@ class GameObject:
 
     @property
     def center(self):
-        return rl.vector2_add(self.position, (self.width // 2, self.height // 2))
+        return rl.vector2_add(self.position, (self.width() // 2, self.height() // 2))
 
     def is_hit(self, other: GameObject):
         return rl.check_collision_circles(self.position, self.hit_radius, other.position, other.hit_radius)

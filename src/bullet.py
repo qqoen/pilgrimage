@@ -14,6 +14,6 @@ class Bullet(GameObject):
         self.position.x += self.direction.x * self.speed * dt
         self.position.y += self.direction.y * self.speed * dt
 
-        if self.position.x <= -self.width or self.position.x >= WINDOW_WIDTH + self.width\
-            or self.position.y <= -self.height or self.position.y >= WINDOW_HEIGHT + self.height:
+        if self.position.x <= -self.width() or self.position.x >= WINDOW_WIDTH + self.width()\
+            or self.position.y <= -self.height() or self.position.y >= WINDOW_HEIGHT + self.height():
             self.is_destroyed = True

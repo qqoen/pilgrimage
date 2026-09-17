@@ -17,13 +17,13 @@ class AssetStore:
 
     @staticmethod
     def load_music(key, file_name):
-        music = rl.load_music_stream(os.path.join("assets", file_name))
+        music = rl.load_music_stream(os.path.join("assets", "audio", file_name))
         AssetStore._assets[key] = music
         AssetStore._music_stream_keys.append(key)
 
     @staticmethod
     def load_sound(key, file_name):
-        sound = rl.load_sound(os.path.join("assets", file_name))
+        sound = rl.load_sound(os.path.join("assets", "audio", file_name))
         AssetStore._assets[key] = sound
         AssetStore._sound_keys.append(key)
 

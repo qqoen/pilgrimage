@@ -31,7 +31,11 @@ def main():
 
 
 def load_assets():
-    AssetStore.load_texture("player_texture", "witch.png")
+    AssetStore.load_texture("player1", "player1.png")
+    AssetStore.load_texture("player2", "player2.png")
+    AssetStore.load_texture("player3", "player3.png")
+    AssetStore.load_texture("player4", "player4.png")
+
     AssetStore.load_texture("bg1_texture", "tile1.png")
     AssetStore.load_texture("enemy1_texture", "enemy2.png")
     AssetStore.load_texture("bullet", "red_bullet.png")
