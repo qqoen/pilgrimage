@@ -16,7 +16,13 @@ def draw_list(objects):
 
 def approach(val, target):
     diff = val - target
-    val += -sign(diff) * abs(diff // 4)
+    step = abs(diff // 4)
+    val += -sign(diff) * step
+
+    snap_threshold = 4
+
+    if abs(val - target) <= snap_threshold:
+        val = target
 
     return val
 

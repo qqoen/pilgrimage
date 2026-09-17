@@ -17,6 +17,7 @@ class Player(GameObject):
         self.speed = 410
         self.bullets: list[Bullet] = []
         self.shot_cooldown: float = 0
+        self.lives = 3
 
     @GameObject.x.setter
     def x(self, value):

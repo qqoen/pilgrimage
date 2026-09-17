@@ -93,12 +93,21 @@ class Stage:
         for enemy in self.enemies:
             if enemy.is_hit(self.player):
                 enemy.is_destroyed = True
-                self.reset_player()
+                self.hit_player()
+
+        for bullet in self.enemy_bullets:
+            if bullet.is_hit(self.player):
+                bullet.is_destroyed = True
+                self.hit_player()
 
         update_list(self.enemies, dt)
         update_list(self.explosions, dt)
         update_list(self.bonuses, dt)
         update_list(self.enemy_bullets, dt)
+
+    def hit_player(self):
+        self.player.lives -= 1
+        self.reset_player()
 
     def reset_player(self):
         self.player.x = WINDOW_WIDTH // 2

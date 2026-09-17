@@ -18,4 +18,5 @@ class Game:
     def draw(self):
         self.stage.draw()
 
-        rl.draw_text_ex(AssetStore.get("font"), f"Score: {self.stage.score}", (5, 5), 30, 5, rl.WHITE)
+        rl.draw_text_ex(AssetStore.get("font"), f"Score: {self.stage.score}", (8, 5), 30, 3, rl.WHITE)
+        rl.draw_text_ex(AssetStore.get("font"), f"Lives: {self.stage.player.lives}", (8, 35), 30, 3, rl.WHITE)
