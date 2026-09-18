@@ -5,18 +5,17 @@ from src.asset_store import AssetStore
 from src.sprite import Sprite, AnimatedSprite
 from src.bullet import Bullet
 from src.constants import AREA_WIDTH, AREA_HEIGHT
-from src.common import approach, play_sound, draw_list, update_list
+from src.common import play_sound, draw_list, update_list
 
 
 class Option:
     def __init__(self, offset):
         self.position = rl.Vector2()
         self.offset = offset
-        self.speed = 40
+        self.speed = 320
 
     def update(self, dt, target: rl.Vector2):
-        self.position.x = approach(self.position.x, target.x, self.speed * dt)
-        self.position.y = approach(self.position.y, target.y, self.speed * dt)
+        self.position = rl.vector2_move_towards(self.position, target, self.speed * dt)
 
     def draw(self):
         x = self.position.x + self.offset
@@ -26,13 +25,12 @@ class Option:
 
 class Trail:
     def __init__(self):
-        self.sprite = Sprite(AssetStore.get("player1"), 2, rl.GRAY)
+        self.sprite = Sprite(AssetStore.get("player1"), 3, rl.fade(rl.WHITE, 0.5))
         self.position = rl.Vector2()
-        self.speed = 30
+        self.speed = 320
 
     def update(self, dt, target: rl.Vector2):
-        self.position.x = approach(self.position.x, target.x, self.speed * dt)
-        self.position.y = approach(self.position.y, target.y, self.speed * dt)
+        self.position = rl.vector2_move_towards(self.position, target, self.speed * dt)
 
     def draw(self):
         self.sprite.draw(self.position.x, self.position.y)

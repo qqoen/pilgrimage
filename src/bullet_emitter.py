@@ -18,6 +18,10 @@ class BulletEmitter(ABC):
         self.emit_cooldown = emit_cooldown
         self.emit_timer: float = 0
 
+    def move(self, x, y):
+        self.position.x = x
+        self.position.y = y
+
     def update(self, dt: float):
         if self.emit_timer <= 0:
             self.emit()
@@ -26,7 +30,7 @@ class BulletEmitter(ABC):
         self.emit_timer -= dt
 
     @abstractmethod
-    def emit(self):
+    def emit(self, **kwargs):
         pass
 
 
@@ -34,21 +38,25 @@ class EmptyEmitter(BulletEmitter):
     def __init__(self):
         super().__init__([], "", 0)
 
-    def emit(self):
+    def emit(self, **kwargs):
         pass
 
 
 class SingleEmitter(BulletEmitter):
-    def emit(self):
+    def __init__(self, bullets, texture, cooldown, bullet_speed):
+        super().__init__(bullets, texture, cooldown)
+        self.bullet_speed = bullet_speed
+
+    def emit(self, **kwargs):
         direction = rl.Vector2(0, 1)
-        bullet = Bullet(Sprite(AssetStore.get(self.texture), 1), direction, 450, BULLET_RADIUS)
+        bullet = Bullet(Sprite(AssetStore.get(self.texture), 1), direction, self.bullet_speed, BULLET_RADIUS)
         bullet.position.x = self.position.x
         bullet.position.y = self.position.y
         self.bullets.append(bullet)
 
 
 class ForkEmitter(BulletEmitter):
-    def emit(self):
+    def emit(self, **kwargs):
         self.spawn_bullet(rl.Vector2(0.5, 1))
         self.spawn_bullet(rl.Vector2(-0.5, 1))
 
@@ -63,8 +71,10 @@ class ShotgunEmitter(BulletEmitter):
     def __init__(self, bullets, texture, cd):
         super().__init__(bullets, texture, cd)
 
-    def emit(self):
-        for _ in range(20):
+    def emit(self, **kwargs):
+        amount = kwargs.get("amount", 20)
+
+        for _ in range(amount):
             dx = random.uniform(-1, 1)
             dy = random.uniform(-1, 1)
             direction = rl.vector2_normalize(rl.Vector2(dx, dy))
@@ -75,31 +85,45 @@ class ShotgunEmitter(BulletEmitter):
             self.bullets.append(bullet)
 
 
-# class CircleEmitter(BulletEmitter):
-#     def __init__(self, x: float, y: float, texture: rl.Texture):
-#         super().__init__(x, y, texture)
-#         self.emit_cooldown: float = 0
+class CircleEmitter(BulletEmitter):
+    def __init__(self, bullets, texture, cd):
+        super().__init__(bullets, texture, cd)
 
-#     def update(self, dt):
-#         if self.emit_cooldown <= 0:
-#             amount = 13
-#             start_v = rl.Vector2(1, 0)
+    def emit(self, **kwargs):
+        amount = kwargs.get("amount", 13)
+        times = kwargs.get("times", 3)
+        speed = kwargs.get("speed", 200)
+        start_v = rl.Vector2(1, 0)
 
-#             for i in range(amount):
-#                 for x in range(3):
-#                     angle = math.radians((360 / amount) * i)
-#                     direction = rl.vector2_normalize(rl.vector2_rotate(start_v, angle))
+        for i in range(amount):
+            for x in range(times):
+                angle = math.radians((360 / amount) * i)
+                direction = rl.vector2_normalize(rl.vector2_rotate(start_v, angle))
 
-#                     bullet = Bullet(Sprite(self.texture), direction, 200 + 50 * x, BULLET_RADIUS)
-#                     bullet.position.x = self.position.x
-#                     bullet.position.y = self.position.y
-#                     self.bullets.append(bullet)
+                bullet = Bullet(Sprite(AssetStore.get(self.texture)), direction, speed + 50 * x, BULLET_RADIUS)
+                bullet.position.x = self.position.x
+                bullet.position.y = self.position.y
+                self.bullets.append(bullet)
 
-#             self.emit_cooldown = 1
 
-#         self.emit_cooldown -= 1 * dt
+class Boss1Emitter(BulletEmitter):
+    def __init__(self, bullets, texture, cd):
+        super().__init__(bullets, texture, 0.5)
+        self.shotgun = ShotgunEmitter(bullets, texture, cd)
+        self.circle = CircleEmitter(bullets, texture, cd)
+        self.count = 1
 
-#         super().update(dt)
+    def move(self, x, y):
+        super().move(x, y)
+        self.shotgun.move(x, y)
+        self.circle.move(x, y)
+
+    def emit(self, **kwargs):
+        if self.count % 2 == 0:
+            self.shotgun.emit()
+        else:
+            self.circle.emit()
+        self.count += 1
 
 
 # class SpiralEmitter(BulletEmitter):

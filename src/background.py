@@ -1,10 +1,22 @@
 import pyray as rl
 import math
 import random
+from abc import ABC, abstractmethod
 from src.constants import AREA_WIDTH, AREA_HEIGHT
+from src.asset_store import AssetStore
 
 
-class ScrollingBackground:
+class Background(ABC):
+    @abstractmethod
+    def update(self, dt: float):
+        pass
+
+    @abstractmethod
+    def draw(self):
+        pass
+
+
+class ScrollingBackground(Background):
     def __init__(self, texture):
         self.texture = texture
         self.speed = 50
@@ -24,7 +36,7 @@ class ScrollingBackground:
             rl.draw_texture_ex(self.texture, (x, y), 0, 2, rl.GRAY)
 
 
-class StarsBackground:
+class StarsBackground(Background):
     def __init__(self):
         self.stars = []
 
@@ -49,37 +61,31 @@ class StarsBackground:
             rl.draw_rectangle(x, int(y), 4, 4, rl.WHITE if spd > 150 else rl.GRAY)
 
 
-class TiledBackground:
-    def __init__(self, texture):
-        self.texture = texture
+class TiledBackground(Background):
+    def __init__(self, textures: list[str]):
+        self.textures = [AssetStore.get(t) for t in textures]
         self.texture_scale = 4
-
-        self.x_count = math.ceil(AREA_WIDTH / self.texture.width * self.texture_scale)
-        self.y_count = math.ceil(AREA_HEIGHT / self.texture.height * self.texture_scale) + 1
-
+        self.speed = 80
+        self.x_count = math.ceil(AREA_WIDTH / self.textures[0].width * self.texture_scale)
+        self.y_count = math.ceil(AREA_HEIGHT / self.textures[0].height * self.texture_scale) + 1
         self.tiles = []
-        self.speed = 40
 
         for col in range(self.x_count):
             for row in range(self.y_count):
-                x = col * self.texture.width * self.texture_scale
-                y = (row - 1) * self.texture.height * self.texture_scale
-                self.tiles.append((x, y))
-
-        (_, self.max_y) = self.tiles[-1]
+                x = col * self.textures[0].width * self.texture_scale
+                y = (row - 1) * self.textures[0].height * self.texture_scale
+                texture = random.choice(self.textures)
+                self.tiles.append((x, y, texture))
 
     def update(self, dt: float):
-        miny = -self.texture.height
+        for i, (x, y, texture) in enumerate(self.tiles):
+            y += self.speed * dt
 
-        for i, (x, y) in enumerate(self.tiles):
-            miny = min(miny, y)
-            dy = y + self.speed * dt
+            if y >= AREA_HEIGHT:
+                y -= (self.y_count - 1) * self.textures[0].height * self.texture_scale
 
-            if dy >= AREA_HEIGHT:
-                dy -= self.max_y
-
-            self.tiles[i] = (x, dy)
+            self.tiles[i] = (x, y, texture)
 
     def draw(self):
-        for (x, y) in self.tiles:
-            rl.draw_texture_ex(self.texture, (x, y), 0, self.texture_scale, rl.GRAY)
+        for (x, y, texture) in self.tiles:
+            rl.draw_texture_ex(texture, (x, y), 0, self.texture_scale, rl.GRAY)

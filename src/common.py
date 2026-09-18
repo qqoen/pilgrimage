@@ -15,18 +15,6 @@ def draw_list(objects):
         obj.draw()
 
 
-def approach(val, target, speed):
-    diff = val - target
-    val += -sign(diff) * (abs(diff) // 2) * speed
-
-    snap_threshold = 4
-
-    if abs(val - target) <= snap_threshold:
-        val = target
-
-    return val
-
-
 def sign(val):
     if val < 0:
         return -1
