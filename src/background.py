@@ -2,7 +2,7 @@ import pyray as rl
 import math
 import random
 from abc import ABC, abstractmethod
-from src.constants import AREA_WIDTH, AREA_HEIGHT
+from src.constants import AREA_WIDTH, AREA_HEIGHT, IS_DEBUG
 from src.asset_store import AssetStore
 
 
@@ -66,14 +66,14 @@ class TiledBackground(Background):
         self.textures = [AssetStore.get(t) for t in textures]
         self.texture_scale = 4
         self.speed = 80
-        self.x_count = math.ceil(AREA_WIDTH / self.textures[0].width * self.texture_scale)
-        self.y_count = math.ceil(AREA_HEIGHT / self.textures[0].height * self.texture_scale) + 1
+        self.x_count = math.ceil(AREA_WIDTH / (self.textures[0].width * self.texture_scale))
+        self.y_count = math.ceil(AREA_HEIGHT / (self.textures[0].height * self.texture_scale)) + 2
         self.tiles = []
 
         for col in range(self.x_count):
             for row in range(self.y_count):
                 x = col * self.textures[0].width * self.texture_scale
-                y = (row - 1) * self.textures[0].height * self.texture_scale
+                y = (row - 2) * self.textures[0].height * self.texture_scale
                 texture = random.choice(self.textures)
                 self.tiles.append((x, y, texture))
 
@@ -89,3 +89,7 @@ class TiledBackground(Background):
     def draw(self):
         for (x, y, texture) in self.tiles:
             rl.draw_texture_ex(texture, (x, y), 0, self.texture_scale, rl.GRAY)
+
+        if IS_DEBUG:
+            # rl.draw_text(f"Tiles: {len(self.tiles)}", 10, 40, 30, rl.GREEN)
+            pass

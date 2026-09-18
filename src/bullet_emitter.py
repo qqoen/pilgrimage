@@ -72,7 +72,7 @@ class ShotgunEmitter(BulletEmitter):
         super().__init__(bullets, texture, cd)
 
     def emit(self, **kwargs):
-        amount = kwargs.get("amount", 20)
+        amount = kwargs.get("amount", 15)
 
         for _ in range(amount):
             dx = random.uniform(-1, 1)

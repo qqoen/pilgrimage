@@ -6,6 +6,7 @@ from src.sprite import Sprite, AnimatedSprite
 from src.bullet import Bullet
 from src.constants import AREA_WIDTH, AREA_HEIGHT
 from src.common import play_sound, draw_list, update_list
+from src.timer import Timer
 
 
 class Option:
@@ -49,8 +50,7 @@ class Player(GameObject):
         self.left_opt = Option(-55)
         self.right_opt = Option(55)
 
-        self.respawn_cd = 1.0
-        self.respawn_timer = 0.0
+        self._respawn_timer = Timer(1.0)
 
     @GameObject.x.setter
     def x(self, value):
@@ -66,12 +66,16 @@ class Player(GameObject):
         self.left_opt.position.y = self.position.y
         self.right_opt.position.y = self.position.y
 
+    @property
+    def is_visible(self):
+        return self._respawn_timer.finished
+
     def update(self, dt: float):
         self.shot_cooldown -= dt
         update_list(self.bullets, dt)
 
-        if self.respawn_timer > 0:
-            self.respawn_timer -= dt
+        if not self._respawn_timer.finished:
+            self._respawn_timer.update(dt)
             return
 
         self.move_player(dt)
@@ -92,7 +96,13 @@ class Player(GameObject):
         dir = rl.Vector2(0, 0)
         dir.x = int(rl.is_key_down(raylib.KEY_RIGHT)) - int(rl.is_key_down(raylib.KEY_LEFT))
         dir.y = int(rl.is_key_down(raylib.KEY_DOWN)) - int(rl.is_key_down(raylib.KEY_UP))
-        dir = rl.vector2_scale(rl.vector2_normalize(dir), self.speed * dt)
+
+        speed = self.speed
+
+        if rl.is_key_down(raylib.KEY_LEFT_SHIFT):
+            speed = self.speed * 0.6
+
+        dir = rl.vector2_scale(rl.vector2_normalize(dir), speed * dt)
         self.position = rl.vector2_add(self.position, dir)
         self.position.x = rl.clamp(self.position.x, self.width() // 3, AREA_WIDTH - self.width() // 3)
         self.position.y = rl.clamp(self.position.y, self.height() // 3, AREA_HEIGHT - self.height() // 3)
@@ -105,13 +115,18 @@ class Player(GameObject):
 
     def hit(self):
         self.lives -= 1
-        self.respawn_timer = self.respawn_cd
+        self._respawn_timer.start()
         play_sound(AssetStore.get("destroy_sound"))
 
     def draw(self):
-        if self.respawn_timer <= 0:
+        if self._respawn_timer.finished:
             self.trail.draw()
             super().draw()
+
+            if rl.is_key_down(raylib.KEY_LEFT_SHIFT):
+                rl.draw_circle_v(self.position, self.hit_radius + 2, rl.BLACK)
+                rl.draw_circle_v(self.position, self.hit_radius, rl.WHITE)
+
             # self.left_opt.draw()
             # self.right_opt.draw()
 

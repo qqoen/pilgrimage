@@ -15,14 +15,6 @@ def draw_list(objects):
         obj.draw()
 
 
-def sign(val):
-    if val < 0:
-        return -1
-    if val > 0:
-        return 1
-    return 0
-
-
 def play_sound(sound: rl.Sound):
     rl.set_sound_pitch(sound, random.uniform(0.8, 1.2))
     rl.play_sound(sound)

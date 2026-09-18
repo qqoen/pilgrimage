@@ -22,7 +22,7 @@ ENEMIES: dict[str, EnemyType] = {
         "speed": 200,
         "health": 7,
         "emitter": "shotgun",
-        "cooldown": 1.5,
+        "cooldown": 2,
     },
     "boss1": {
         "texture": "boss1",

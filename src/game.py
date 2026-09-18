@@ -1,10 +1,7 @@
 import pyray as rl
-import raylib
 from src.asset_store import AssetStore
+from src.states import StartState, PlayState, EndState
 from src.state_machine import StateMachine
-from src.start_state import StartState
-from src.play_state import PlayState
-from src.end_state import EndState
 
 
 class Game(StateMachine):

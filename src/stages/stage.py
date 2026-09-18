@@ -1,12 +1,12 @@
 import pyray as rl
 from src.player import Player
-from src.background import ScrollingBackground, Background, TiledBackground
+from src.background import Background
 from src.enemy import Enemy, Boss, Mob
 from src.bonus import Bonus
 from src.asset_store import AssetStore
 from src.blast import Explosion
 from src.constants import AREA_WIDTH, AREA_HEIGHT
-from src.common import update_list, draw_list, play_sound
+from src.common import update_list, draw_list
 from src.bullet import Bullet
 from src.data import ENEMIES, EnemyType
 from src.bullet_emitter import *
@@ -14,9 +14,33 @@ from src.sprite import AnimatedSprite
 from src.timeline import Timeline
 
 
+class TitleCard:
+    def __init__(self):
+        self._title = ""
+        self._count = 3
+
+    def show(self, title):
+        self._title = title
+
+    def update(self, dt):
+        if self._count <= 0:
+            return
+
+        self._count -= dt
+
+    def draw(self):
+        if self._count <= 0:
+            return
+
+        font = AssetStore.get("font")
+        text = f"[{self._title}]"
+        width = rl.measure_text_ex(font, text, 30, 3).x
+        rl.draw_text_ex(font, text, (AREA_WIDTH - width - 10, AREA_HEIGHT - 30), 30, 3, rl.WHITE)
+
+
 class Stage:
     def __init__(self, bg: Background, music: str):
-        self.music = AssetStore.get(music)
+        self.music: rl.Music = AssetStore.get(music)
         player_sprite = AnimatedSprite([
             "player1",
             "player2",
@@ -32,6 +56,7 @@ class Stage:
         self.score = 0
         self.tl = Timeline()
         self.bg = bg
+        self.title_card = TitleCard()
 
     def update(self, dt):
         self.player.update(dt)
@@ -44,29 +69,33 @@ class Stage:
                     bullet.is_destroyed = True
                     self.hit_enemy(enemy)
 
-        for bonus in self.bonuses:
-            if bonus.is_hit(self.player):
-                bonus.pick()
-                self.score += bonus.score
-
-        if self.player.respawn_timer <= 0:
-            for enemy in self.enemies:
-                if enemy.is_hit(self.player):
-                    enemy.is_destroyed = True
-                    self.hit_player()
-
-            for bullet in self.enemy_bullets:
-                if bullet.is_hit(self.player):
-                    bullet.is_destroyed = True
-                    self.hit_player()
+        if self.player.is_visible:
+            self.check_player_collisions()
 
         update_list(self.enemies, dt)
         update_list(self.explosions, dt)
         update_list(self.bonuses, dt)
         update_list(self.enemy_bullets, dt)
+        self.title_card.update(dt)
 
         if len(self.enemies) == 0:
             self.tl.start()
+
+    def check_player_collisions(self):
+        for bonus in self.bonuses:
+            if bonus.is_hit(self.player):
+                bonus.pick()
+                self.score += bonus.score
+
+        for enemy in self.enemies:
+            if enemy.is_hit(self.player):
+                enemy.is_destroyed = True
+                self.hit_player()
+
+        for bullet in self.enemy_bullets:
+            if bullet.is_hit(self.player):
+                bullet.is_destroyed = True
+                self.hit_player()
 
     def hit_enemy(self, enemy: Enemy):
         bonuses = enemy.hit()
@@ -113,6 +142,7 @@ class Stage:
             case _: return EmptyEmitter()
 
     def draw(self):
+        rl.clear_background(rl.BLACK)
         self.bg.draw()
 
         draw_list(self.explosions)
@@ -121,58 +151,7 @@ class Stage:
         draw_list(self.enemies)
         draw_list(self.enemy_bullets)
 
+        self.title_card.draw()
 
-class Stage1(Stage):
-    def __init__(self):
-        # super().__init__(ScrollingBackground(AssetStore.get("stage2bg")), "stage2music")
-        super().__init__(TiledBackground(["grass_bg", "grass2_bg", "grass3_bg"]), "stage3music")
-
-        self.tl.add(1, lambda: self.spawn("fairy", lane=1))
-        self.tl.add(1.5, lambda: self.spawn("fairy", lane=2))
-        self.tl.add(2, lambda: self.spawn("fairy", lane=3))
-        self.tl.add(2.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(3, lambda: self.spawn("fairy", lane=5))
-
-        self.tl.add(5, lambda: self.spawn("fairy", lane=5))
-        self.tl.add(5.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(6, lambda: self.spawn("fairy", lane=3))
-        self.tl.add(6.5, lambda: self.spawn("fairy", lane=2))
-        self.tl.add(7, lambda: self.spawn("fairy", lane=1))
-
-        self.tl.add(10, lambda: self.spawn("fairy2", lane=1))
-        self.tl.add(11, lambda: self.spawn("fairy2", lane=5))
-
-        self.tl.add(13, lambda: self.spawn("fairy", lane=1))
-        self.tl.add(13.5, lambda: self.spawn("fairy", lane=2))
-        self.tl.add(14, lambda: self.spawn("fairy", lane=1))
-        self.tl.add(14.5, lambda: self.spawn("fairy", lane=2))
-
-        self.tl.add(16, lambda: self.spawn("fairy", lane=5))
-        self.tl.add(16.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(17, lambda: self.spawn("fairy", lane=5))
-        self.tl.add(17.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(18, lambda: self.spawn("fairy", lane=5))
-
-        self.tl.add(20, lambda: self.spawn("fairy2", lane=3))
-        self.tl.add(21, lambda: self.spawn("fairy2", lane=2))
-        self.tl.add(22, lambda: self.spawn("fairy2", lane=1))
-
-        self.tl.add(26, lambda: self.spawn_boss("boss1", lane=3))
-
-        self.tl.add(30, lambda: self.spawn("fairy", lane=1))
-        self.tl.add(31.5, lambda: self.spawn("fairy", lane=2))
-        self.tl.add(32, lambda: self.spawn("fairy", lane=3))
-        self.tl.add(32.5, lambda: self.spawn("fairy", lane=4))
-
-        self.tl.add(34, lambda: self.spawn("fairy", lane=5))
-        self.tl.add(34.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(35, lambda: self.spawn("fairy", lane=3))
-        self.tl.add(35.5, lambda: self.spawn("fairy", lane=2))
-
-        self.tl.add(37, lambda: self.spawn("fairy2", lane=5))
-        self.tl.add(37.5, lambda: self.spawn("fairy2", lane=1))
-
-        self.tl.add(38.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(39, lambda: self.spawn("fairy", lane=2))
-        self.tl.add(39.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(40, lambda: self.spawn("fairy", lane=2))
+    def show_title_card(self, title):
+        self.title_card.show(title)

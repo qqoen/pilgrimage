@@ -25,8 +25,6 @@ def main():
         game.draw()
         rl.end_drawing()
 
-    # AssetStore.unload()
-
     rl.close_audio_device()
     rl.close_window()
 
