@@ -27,24 +27,24 @@ class Stage1(Stage):
         self.tl.add(10, lambda: self.spawn("fairy2", lane=1))
         self.tl.add(11, lambda: self.spawn("fairy2", lane=5))
 
-        self.tl.add(13, lambda: self.spawn("fairy", lane=1))
-        self.tl.add(13.5, lambda: self.spawn("fairy", lane=2))
         self.tl.add(14, lambda: self.spawn("fairy", lane=1))
         self.tl.add(14.5, lambda: self.spawn("fairy", lane=2))
+        self.tl.add(15, lambda: self.spawn("fairy", lane=1))
+        self.tl.add(15.5, lambda: self.spawn("fairy", lane=2))
 
-        self.tl.add(16, lambda: self.spawn("fairy", lane=5))
-        self.tl.add(16.5, lambda: self.spawn("fairy", lane=4))
         self.tl.add(17, lambda: self.spawn("fairy", lane=5))
         self.tl.add(17.5, lambda: self.spawn("fairy", lane=4))
         self.tl.add(18, lambda: self.spawn("fairy", lane=5))
+        self.tl.add(18.5, lambda: self.spawn("fairy", lane=4))
+        self.tl.add(19, lambda: self.spawn("fairy", lane=5))
 
-        self.tl.add(20, lambda: self.spawn("fairy2", lane=3))
-        self.tl.add(21, lambda: self.spawn("fairy2", lane=2))
-        self.tl.add(22, lambda: self.spawn("fairy2", lane=1))
+        self.tl.add(21, lambda: self.spawn("fairy2", lane=5))
+        self.tl.add(22, lambda: self.spawn("fairy2", lane=3))
+        self.tl.add(23, lambda: self.spawn("fairy2", lane=1))
 
-        self.tl.add(26, lambda: self.spawn_boss("boss1", lane=3))
+        self.tl.add(27, lambda: self.spawn_boss("boss1", lane=3))
 
-        self.tl.add(30, lambda: self.spawn("fairy", lane=1))
+        self.tl.add(31, lambda: self.spawn("fairy", lane=1))
         self.tl.add(31.5, lambda: self.spawn("fairy", lane=2))
         self.tl.add(32, lambda: self.spawn("fairy", lane=3))
         self.tl.add(32.5, lambda: self.spawn("fairy", lane=4))

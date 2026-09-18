@@ -1,9 +1,9 @@
 import pyray as rl
 import raylib
 from src.constants import WINDOW_WIDTH, WINDOW_HEIGHT
-from src.state_machine import StateMachine, State
+from src.common import StateMachine, State
 from src.asset_store import AssetStore
-from src.common import print_center
+from src.utils import print_center
 
 
 class StartState(State):

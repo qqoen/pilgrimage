@@ -1,6 +1,6 @@
 import pyray as rl
 import random
-from src.common import play_sound
+from src.utils import play_sound
 from src.asset_store import AssetStore
 from src.sprite import Sprite
 from src.bonus import Bonus
@@ -8,7 +8,7 @@ from src.game_object import GameObject
 from src.constants import AREA_WIDTH, AREA_HEIGHT
 from src.data import EnemyType
 from src.bullet_emitter import *
-from src.timeline import TimelineLoop
+from src.common import TimelineLoop
 
 
 class Enemy(GameObject):

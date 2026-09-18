@@ -2,7 +2,7 @@ import pyray as rl
 from src.asset_store import AssetStore
 from src.stages import Stage1
 from src.constants import AREA_WIDTH, WINDOW_WIDTH, WINDOW_HEIGHT
-from src.state_machine import StateMachine, State
+from src.common import StateMachine, State
 
 
 class PlayState(State):

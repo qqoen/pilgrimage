@@ -2,7 +2,7 @@ from src.game_object import GameObject
 from src.sprite import Sprite
 from src.asset_store import AssetStore
 from src.constants import AREA_HEIGHT
-from src.common import play_sound
+from src.utils import play_sound
 
 
 class Bonus(GameObject):

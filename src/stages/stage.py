@@ -6,12 +6,12 @@ from src.bonus import Bonus
 from src.asset_store import AssetStore
 from src.blast import Explosion
 from src.constants import AREA_WIDTH, AREA_HEIGHT
-from src.common import update_list, draw_list
+from src.utils import update_list, draw_list
 from src.bullet import Bullet
 from src.data import ENEMIES, EnemyType
 from src.bullet_emitter import *
 from src.sprite import AnimatedSprite
-from src.timeline import Timeline
+from src.common import Timeline
 
 
 class TitleCard:

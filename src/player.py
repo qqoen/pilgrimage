@@ -5,8 +5,8 @@ from src.asset_store import AssetStore
 from src.sprite import Sprite, AnimatedSprite
 from src.bullet import Bullet
 from src.constants import AREA_WIDTH, AREA_HEIGHT
-from src.common import play_sound, draw_list, update_list
-from src.timer import Timer
+from src.utils import play_sound, draw_list, update_list
+from src.common import Timer
 
 
 class Option:

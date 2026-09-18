@@ -1,7 +1,7 @@
 import pyray as rl
 import raylib
 from src.asset_store import AssetStore
-from src.state_machine import StateMachine, State
+from src.common import StateMachine, State
 
 
 class EndState(State):

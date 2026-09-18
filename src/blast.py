@@ -1,6 +1,6 @@
 import pyray as rl
 import random
-from src.common import update_list, draw_list
+from src.utils import update_list, draw_list
 
 
 class Blast:

@@ -1,7 +1,7 @@
 import pyray as rl
 from src.asset_store import AssetStore
 from src.states import StartState, PlayState, EndState
-from src.state_machine import StateMachine
+from src.common import StateMachine
 
 
 class Game(StateMachine):
