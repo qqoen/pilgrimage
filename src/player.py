@@ -51,6 +51,7 @@ class Player(GameObject):
         self.right_opt = Option(55)
 
         self._respawn_timer = Timer(1.0)
+        self._invincible_timer = Timer(3.0)
 
     @GameObject.x.setter
     def x(self, value):
@@ -69,6 +70,10 @@ class Player(GameObject):
     @property
     def is_visible(self):
         return self._respawn_timer.finished
+
+    @property
+    def is_invincible(self):
+        return not self._invincible_timer.finished
 
     def update(self, dt: float):
         self.shot_cooldown -= dt
@@ -92,6 +97,8 @@ class Player(GameObject):
 
         self.sprite.update(dt)
 
+        self._invincible_timer.update(dt)
+
     def move_player(self, dt):
         dir = rl.Vector2(0, 0)
         dir.x = int(rl.is_key_down(raylib.KEY_RIGHT)) - int(rl.is_key_down(raylib.KEY_LEFT))
@@ -114,14 +121,21 @@ class Player(GameObject):
         self.bullets.append(bullet)
 
     def hit(self):
+        if not self._invincible_timer.finished:
+            return
+
         self.lives -= 1
         self._respawn_timer.start()
+        self._invincible_timer.start()
         play_sound(AssetStore.get("destroy_sound"))
 
     def draw(self):
         if self._respawn_timer.finished:
-            self.trail.draw()
-            super().draw()
+            if self._invincible_timer.finished:
+                self.trail.draw()
+
+            if self._invincible_timer.finished or not self._invincible_timer.finished and self._invincible_timer.frame % 4 == 0:
+                super().draw()
 
             if rl.is_key_down(raylib.KEY_LEFT_SHIFT):
                 rl.draw_circle_v(self.position, self.hit_radius + 2, rl.BLACK)

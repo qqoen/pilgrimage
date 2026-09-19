@@ -6,12 +6,12 @@ from src.bonus import Bonus
 from src.asset_store import AssetStore
 from src.blast import Explosion
 from src.constants import AREA_WIDTH, AREA_HEIGHT
-from src.utils import update_list, draw_list
+from src.utils import update_list, draw_list, print_center
 from src.bullet import Bullet
 from src.data import ENEMIES, EnemyType
 from src.bullet_emitter import *
 from src.sprite import AnimatedSprite
-from src.common import Timeline
+from src.common import Timeline, Timer
 
 
 class TitleCard:
@@ -39,8 +39,11 @@ class TitleCard:
 
 
 class Stage:
-    def __init__(self, bg: Background, music: str):
+    def __init__(self, bg: Background, music: str, stage_name: str):
         self.music: rl.Music = AssetStore.get(music)
+        self.stage_name = stage_name
+        self.name_timer = Timer(2, True)
+
         player_sprite = AnimatedSprite([
             "player1",
             "player2",
@@ -69,23 +72,29 @@ class Stage:
                     bullet.is_destroyed = True
                     self.hit_enemy(enemy)
 
-        if self.player.is_visible:
-            self.check_player_collisions()
+        self.check_player_collisions()
 
         update_list(self.enemies, dt)
         update_list(self.explosions, dt)
         update_list(self.bonuses, dt)
         update_list(self.enemy_bullets, dt)
         self.title_card.update(dt)
+        self.name_timer.update(dt)
 
         if len(self.enemies) == 0:
             self.tl.start()
 
     def check_player_collisions(self):
+        if not self.player.is_visible:
+            return
+
         for bonus in self.bonuses:
             if bonus.is_hit(self.player):
                 bonus.pick()
                 self.score += bonus.score
+
+        if self.player.is_invincible:
+            return
 
         for enemy in self.enemies:
             if enemy.is_hit(self.player):
@@ -152,6 +161,10 @@ class Stage:
         draw_list(self.enemy_bullets)
 
         self.title_card.draw()
+
+        if not self.name_timer.finished:
+            font = AssetStore.get("font")
+            print_center(font, self.stage_name, 40, AREA_HEIGHT // 2, rl.WHITE, AREA_WIDTH)
 
     def show_title_card(self, title):
         self.title_card.show(title)

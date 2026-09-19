@@ -2,6 +2,7 @@ class Timer:
     def __init__(self, duration, autostart=False):
         self._duration = duration
         self._time_left = 0.0
+        self._frame = 0
 
         if autostart:
             self.start()
@@ -18,11 +19,19 @@ class Timer:
     def time_left(self):
         return self._time_left
 
+    @property
+    def frame(self):
+        return self._frame
+
     def start(self):
         self._time_left = self._duration
+        self._frame = 0
 
     def finish(self):
         self._time_left = 0
 
     def update(self, dt: float):
         self._time_left = max(0, self._time_left - dt)
+
+        if self._time_left > 0:
+            self._frame += 1

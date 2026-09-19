@@ -20,6 +20,6 @@ def play_sound(sound: rl.Sound):
     rl.play_sound(sound)
 
 
-def print_center(font: rl.Font, text: str, font_size: int, y: int, color=rl.WHITE):
+def print_center(font: rl.Font, text: str, font_size: int, y: int, color=rl.WHITE, area_width=WINDOW_WIDTH):
     width = rl.measure_text_ex(font, text, font_size, 3)
-    rl.draw_text_ex(font, text, (WINDOW_WIDTH // 2 - width.x // 2, y), font_size, 3, color)
+    rl.draw_text_ex(font, text, (area_width // 2 - width.x // 2, y), font_size, 3, color)

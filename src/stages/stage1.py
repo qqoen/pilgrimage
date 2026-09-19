@@ -7,57 +7,62 @@ from src.background import TiledBackground, StarsBackground
 
 class Stage1(Stage):
     def __init__(self):
-        super().__init__(TiledBackground(["grass_bg", "grass2_bg", "grass3_bg"]), "stage3music")
+        super().__init__(TiledBackground(["grass_bg", "grass2_bg", "grass3_bg"]), "stage3music", "Stage 1")
         # super().__init__(StarsBackground(), "stage3music")
 
         self.show_title_card("Spirits Forest")
 
-        self.tl.add(1, lambda: self.spawn("fairy", lane=1))
-        self.tl.add(1.5, lambda: self.spawn("fairy", lane=2))
-        self.tl.add(2, lambda: self.spawn("fairy", lane=3))
-        self.tl.add(2.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(3, lambda: self.spawn("fairy", lane=5))
+        offset = 1
 
-        self.tl.add(5, lambda: self.spawn("fairy", lane=5))
-        self.tl.add(5.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(6, lambda: self.spawn("fairy", lane=3))
-        self.tl.add(6.5, lambda: self.spawn("fairy", lane=2))
-        self.tl.add(7, lambda: self.spawn("fairy", lane=1))
+        def add(time, func):
+            self.tl.add(offset + time, func)
 
-        self.tl.add(10, lambda: self.spawn("fairy2", lane=1))
-        self.tl.add(11, lambda: self.spawn("fairy2", lane=5))
+        add(1, lambda: self.spawn("fairy", lane=1))
+        add(1.5, lambda: self.spawn("fairy", lane=2))
+        add(2, lambda: self.spawn("fairy", lane=3))
+        add(2.5, lambda: self.spawn("fairy", lane=4))
+        add(3, lambda: self.spawn("fairy", lane=5))
 
-        self.tl.add(14, lambda: self.spawn("fairy", lane=1))
-        self.tl.add(14.5, lambda: self.spawn("fairy", lane=2))
-        self.tl.add(15, lambda: self.spawn("fairy", lane=1))
-        self.tl.add(15.5, lambda: self.spawn("fairy", lane=2))
+        add(5, lambda: self.spawn("fairy", lane=5))
+        add(5.5, lambda: self.spawn("fairy", lane=4))
+        add(6, lambda: self.spawn("fairy", lane=3))
+        add(6.5, lambda: self.spawn("fairy", lane=2))
+        add(7, lambda: self.spawn("fairy", lane=1))
 
-        self.tl.add(17, lambda: self.spawn("fairy", lane=5))
-        self.tl.add(17.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(18, lambda: self.spawn("fairy", lane=5))
-        self.tl.add(18.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(19, lambda: self.spawn("fairy", lane=5))
+        add(10, lambda: self.spawn("fairy2", lane=1))
+        add(11, lambda: self.spawn("fairy2", lane=5))
 
-        self.tl.add(21, lambda: self.spawn("fairy2", lane=5))
-        self.tl.add(22, lambda: self.spawn("fairy2", lane=3))
-        self.tl.add(23, lambda: self.spawn("fairy2", lane=1))
+        add(14, lambda: self.spawn("fairy", lane=1))
+        add(14.5, lambda: self.spawn("fairy", lane=2))
+        add(15, lambda: self.spawn("fairy", lane=1))
+        add(15.5, lambda: self.spawn("fairy", lane=2))
 
-        self.tl.add(27, lambda: self.spawn_boss("boss1", lane=3))
+        add(17, lambda: self.spawn("fairy", lane=5))
+        add(17.5, lambda: self.spawn("fairy", lane=4))
+        add(18, lambda: self.spawn("fairy", lane=5))
+        add(18.5, lambda: self.spawn("fairy", lane=4))
+        add(19, lambda: self.spawn("fairy", lane=5))
 
-        self.tl.add(31, lambda: self.spawn("fairy", lane=1))
-        self.tl.add(31.5, lambda: self.spawn("fairy", lane=2))
-        self.tl.add(32, lambda: self.spawn("fairy", lane=3))
-        self.tl.add(32.5, lambda: self.spawn("fairy", lane=4))
+        add(21, lambda: self.spawn("fairy2", lane=1))
+        add(22, lambda: self.spawn("fairy2", lane=3))
+        add(23, lambda: self.spawn("fairy2", lane=5))
 
-        self.tl.add(34, lambda: self.spawn("fairy", lane=5))
-        self.tl.add(34.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(35, lambda: self.spawn("fairy", lane=3))
-        self.tl.add(35.5, lambda: self.spawn("fairy", lane=2))
+        add(28, lambda: self.spawn_boss("boss1", lane=3))
 
-        self.tl.add(37, lambda: self.spawn("fairy2", lane=5))
-        self.tl.add(37.5, lambda: self.spawn("fairy2", lane=1))
+        add(31, lambda: self.spawn("fairy", lane=1))
+        add(31.5, lambda: self.spawn("fairy", lane=2))
+        add(32, lambda: self.spawn("fairy", lane=3))
+        add(32.5, lambda: self.spawn("fairy", lane=4))
 
-        self.tl.add(38.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(39, lambda: self.spawn("fairy", lane=2))
-        self.tl.add(39.5, lambda: self.spawn("fairy", lane=4))
-        self.tl.add(40, lambda: self.spawn("fairy", lane=2))
+        add(34, lambda: self.spawn("fairy", lane=5))
+        add(34.5, lambda: self.spawn("fairy", lane=4))
+        add(35, lambda: self.spawn("fairy", lane=3))
+        add(35.5, lambda: self.spawn("fairy", lane=2))
+
+        add(37, lambda: self.spawn("fairy2", lane=5))
+        add(37.5, lambda: self.spawn("fairy2", lane=1))
+
+        add(38.5, lambda: self.spawn("fairy", lane=4))
+        add(39, lambda: self.spawn("fairy", lane=2))
+        add(39.5, lambda: self.spawn("fairy", lane=4))
+        add(40, lambda: self.spawn("fairy", lane=2))

@@ -19,7 +19,7 @@ ENEMIES: dict[str, EnemyType] = {
     },
     "fairy2": {
         "texture": "red_fairy",
-        "speed": 200,
+        "speed": 150,
         "health": 7,
         "emitter": "shotgun",
         "cooldown": 2,
