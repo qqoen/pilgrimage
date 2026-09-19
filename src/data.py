@@ -7,6 +7,8 @@ class EnemyType(TypedDict):
     health: int
     emitter: str
     cooldown: float
+    bonus_chance: int
+    score: int
 
 
 ENEMIES: dict[str, EnemyType] = {
@@ -16,6 +18,8 @@ ENEMIES: dict[str, EnemyType] = {
         "health": 3,
         "emitter": "single",
         "cooldown": 3,
+        "bonus_chance": 50,
+        "score": 30,
     },
     "fairy2": {
         "texture": "red_fairy",
@@ -23,6 +27,8 @@ ENEMIES: dict[str, EnemyType] = {
         "health": 7,
         "emitter": "shotgun",
         "cooldown": 2,
+        "bonus_chance": 75,
+        "score": 60,
     },
     "boss1": {
         "texture": "boss1",
@@ -30,5 +36,7 @@ ENEMIES: dict[str, EnemyType] = {
         "health": 80,
         "emitter": "",
         "cooldown": 0,
+        "bonus_chance": 100,
+        "score": 120,
     },
 }

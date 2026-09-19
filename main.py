@@ -11,7 +11,7 @@ def main():
     rl.init_audio_device()
 
     rl.set_target_fps(FPS)
-    rl.set_exit_key(raylib.KEY_ESCAPE)
+    rl.set_exit_key(raylib.KEY_DELETE)
     rl.hide_cursor()
 
     load_assets()

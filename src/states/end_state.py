@@ -5,13 +5,15 @@ from src.common import StateMachine, State
 
 
 class EndState(State):
-    def __init__(self, sm: StateMachine, score):
+    def __init__(self, sm: StateMachine, player_data, score):
         super().__init__()
         self.sm = sm
+        self.player_data = player_data
         self.score = score
 
     def update(self, dt):
         if rl.is_key_pressed(raylib.KEY_ENTER):
+            self.player_data.update_score(self.score)
             self.sm.switch("start")
 
     def draw(self):

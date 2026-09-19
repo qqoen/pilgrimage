@@ -112,7 +112,7 @@ class Stage:
 
         if enemy.is_destroyed:
             self.explosions.append(Explosion(enemy.x, enemy.y))
-            self.score += 30
+            self.score += enemy.score
 
     def hit_player(self):
         self.player.hit()

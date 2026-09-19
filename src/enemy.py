@@ -17,6 +17,8 @@ class Enemy(GameObject):
         self.speed = enemy["speed"]
         self.health = enemy["health"]
         self.hit_frames = 0.0
+        self.bonus_chance = enemy["bonus_chance"]
+        self.score = enemy["score"]
 
     def update(self, dt):
         if self.hit_frames > 0:
@@ -38,8 +40,8 @@ class Enemy(GameObject):
             play_sound(AssetStore.get("destroy_sound"))
             self.is_destroyed = True
 
-            if random.randint(1, 100) <= 50:
-                bonuses.append(Bonus(self.x, self.y, 30))
+            if random.randint(1, 100) <= self.bonus_chance:
+                bonuses.append(Bonus(self.x, self.y, self.score))
         else:
             play_sound(AssetStore.get("hit_sound"))
             self.hit_frames = 1
