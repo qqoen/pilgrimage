@@ -74,3 +74,16 @@ class Sprite(Graphics):
         x = x - self.width() // 2
         y = y - self.height() // 2
         rl.draw_texture_ex(self.texture, (x, y), 0, self.texture_scale, self.tint)
+
+
+class Shadow:
+    def __init__(self, texture, texture_scale):
+        self.sprite = Sprite(AssetStore.get(texture), texture_scale, rl.fade(rl.BLACK, 0.5))
+        self.position = rl.Vector2()
+
+    def update(self, dt, target):
+        self.position.x = target.x
+        self.position.y = target.y + 25
+
+    def draw(self):
+        self.sprite.draw(self.position.x, self.position.y)

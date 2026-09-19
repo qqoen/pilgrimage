@@ -2,7 +2,7 @@ import pyray as rl
 import random
 from src.utils import play_sound
 from src.asset_store import AssetStore
-from src.sprite import Sprite
+from src.sprite import Sprite, Shadow
 from src.bonus import Bonus
 from src.game_object import GameObject
 from src.constants import AREA_WIDTH, AREA_HEIGHT
@@ -19,6 +19,7 @@ class Enemy(GameObject):
         self.hit_frames = 0.0
         self.bonus_chance = enemy["bonus_chance"]
         self.score = enemy["score"]
+        self.shadow = Shadow(enemy["texture"], 3)
 
     def update(self, dt):
         if self.hit_frames > 0:
@@ -27,6 +28,12 @@ class Enemy(GameObject):
         else:
             self.sprite.tint = rl.WHITE
             self.hit_frames = 0
+
+        self.shadow.update(dt, self.position)
+
+    def draw(self):
+        self.shadow.draw()
+        super().draw()
 
     def hit(self) -> list[Bonus]:
         if self.y <= 0:

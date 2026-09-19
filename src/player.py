@@ -2,7 +2,7 @@ import pyray as rl
 import raylib
 from src.game_object import GameObject
 from src.asset_store import AssetStore
-from src.sprite import Sprite, AnimatedSprite
+from src.sprite import Sprite, AnimatedSprite, Shadow
 from src.bullet import Bullet
 from src.constants import AREA_WIDTH, AREA_HEIGHT
 from src.utils import play_sound, draw_list, update_list
@@ -28,7 +28,7 @@ class Trail:
     def __init__(self):
         self.sprite = Sprite(AssetStore.get("player1"), 3, rl.fade(rl.WHITE, 0.5))
         self.position = rl.Vector2()
-        self.speed = 320
+        self.speed = 350
 
     def update(self, dt, target: rl.Vector2):
         self.position = rl.vector2_move_towards(self.position, target, self.speed * dt)
@@ -46,6 +46,7 @@ class Player(GameObject):
         self.shot_cooldown: float = 0
         self.lives = 3
         self.trail = Trail()
+        self.shadow = Shadow("player1", 3)
 
         self.left_opt = Option(-55)
         self.right_opt = Option(55)
@@ -88,6 +89,7 @@ class Player(GameObject):
         self.left_opt.update(dt, self.position)
         self.right_opt.update(dt, self.position)
         self.trail.update(dt, self.position)
+        self.shadow.update(dt, self.position)
 
         if rl.is_key_down(raylib.KEY_Z) and self.shot_cooldown <= 0:
             self.spawn_bullet(self.position.x - 14, self.position.y - self.height() // 2)
@@ -130,7 +132,9 @@ class Player(GameObject):
         play_sound(AssetStore.get("destroy_sound"))
 
     def draw(self):
-        if self._respawn_timer.finished:
+        if self.is_visible:
+            self.shadow.draw()
+
             if self._invincible_timer.finished:
                 self.trail.draw()
 
