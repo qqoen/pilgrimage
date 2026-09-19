@@ -57,11 +57,12 @@ class SingleEmitter(BulletEmitter):
 
 class ForkEmitter(BulletEmitter):
     def emit(self, **kwargs):
-        self.spawn_bullet(rl.Vector2(0.5, 1))
-        self.spawn_bullet(rl.Vector2(-0.5, 1))
+        speed = kwargs.get("speed", 300)
+        self.spawn_bullet(rl.Vector2(0.15, 1), speed)
+        self.spawn_bullet(rl.Vector2(-0.15, 1), speed)
 
-    def spawn_bullet(self, direction):
-        bullet = Bullet(Sprite(AssetStore.get(self.texture), 1), rl.vector2_normalize(direction), 450, BULLET_RADIUS)
+    def spawn_bullet(self, direction, speed):
+        bullet = Bullet(Sprite(AssetStore.get(self.texture), 1), rl.vector2_normalize(direction), speed, BULLET_RADIUS)
         bullet.position.x = self.position.x
         bullet.position.y = self.position.y
         self.bullets.append(bullet)

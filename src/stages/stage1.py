@@ -3,12 +3,11 @@ from src.asset_store import AssetStore
 from src.bullet import Bullet
 from src.bullet_emitter import *
 from .stage import Stage
-from src.background import TiledBackground, StarsBackground
+from src.background import TiledBackground
 
 class Stage1(Stage):
     def __init__(self):
         super().__init__(TiledBackground(["grass_bg", "grass2_bg", "grass3_bg"]), "stage3music", "Stage 1")
-        # super().__init__(StarsBackground(), "stage3music")
 
         self.show_title_card("Spirits Forest")
 

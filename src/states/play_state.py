@@ -12,13 +12,12 @@ class PlayState(State):
         super().__init__()
         self.sm = sm
         self.stage = Stage1()
+        self.is_paused = False
+        self.gui_bg_color = rl.Color(0, 40, 10, 255)
+        self.pause_bg_color = rl.Color(0, 0, 0, 150)
+
         rl.play_music_stream(self.stage.music)
         rl.set_music_volume(self.stage.music, 0.5)
-
-        self.gui_bg_color = rl.Color(0, 40, 10, 255)
-
-        self.is_paused = False
-        self.pause_bg_color = rl.Color(0, 0, 0, 150)
 
     def update(self, dt):
         if rl.is_key_pressed(raylib.KEY_ESCAPE):
@@ -36,7 +35,6 @@ class PlayState(State):
         self.stage.draw()
 
         font = AssetStore.get("font")
-
         gui_x = AREA_WIDTH
         gui_y = 0
         gui_width = WINDOW_WIDTH - AREA_WIDTH

@@ -14,6 +14,7 @@ from src.common import TimelineLoop
 class Enemy(GameObject):
     def __init__(self, enemy: EnemyType):
         super().__init__(Sprite(AssetStore.get(enemy["texture"]), 3), 16)
+        self.enemy_data = enemy
         self.speed = enemy["speed"]
         self.health = enemy["health"]
         self.hit_frames = 0.0
@@ -36,7 +37,7 @@ class Enemy(GameObject):
         super().draw()
 
     def hit(self) -> list[Bonus]:
-        if self.y <= 0:
+        if self.y < self.height():
             return []
 
         self.health -= 1

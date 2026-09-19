@@ -39,4 +39,15 @@ ENEMIES: dict[str, EnemyType] = {
         "bonus_chance": 100,
         "score": 120,
     },
+
+
+    "survival_fairy": {
+        "texture": "blue_fairy",
+        "speed": 160,
+        "health": 2,
+        "emitter": "fork",
+        "cooldown": 3,
+        "bonus_chance": 50,
+        "score": 30,
+    },
 }

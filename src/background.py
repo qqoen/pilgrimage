@@ -2,7 +2,7 @@ import pyray as rl
 import math
 import random
 from abc import ABC, abstractmethod
-from src.constants import AREA_WIDTH, AREA_HEIGHT, IS_DEBUG
+from src.constants import AREA_WIDTH, AREA_HEIGHT, IS_DEBUG, WINDOW_WIDTH
 from src.asset_store import AssetStore
 
 
@@ -66,7 +66,7 @@ class TiledBackground(Background):
         self.textures = [AssetStore.get(t) for t in textures]
         self.texture_scale = 4
         self.speed = 80
-        self.x_count = math.ceil(AREA_WIDTH / (self.textures[0].width * self.texture_scale))
+        self.x_count = math.ceil(WINDOW_WIDTH / (self.textures[0].width * self.texture_scale))
         self.y_count = math.ceil(AREA_HEIGHT / (self.textures[0].height * self.texture_scale)) + 2
         self.tiles = []
 

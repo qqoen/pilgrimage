@@ -1,6 +1,6 @@
 import pyray as rl
 import raylib
-from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH, FPS
+from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH, FPS, IS_DEBUG
 from src.game import Game
 from src.common import *
 from src.asset_store import AssetStore
@@ -11,14 +11,16 @@ def main():
     rl.init_audio_device()
 
     rl.set_target_fps(FPS)
-    rl.set_exit_key(raylib.KEY_DELETE)
+    rl.set_exit_key(raylib.KEY_DELETE if IS_DEBUG else raylib.KEY_NULL)
     rl.hide_cursor()
 
     load_assets()
 
     game = Game()
 
-    while not rl.window_should_close():
+    should_exit = lambda: rl.window_should_close() or game.player_data.should_quit
+
+    while not should_exit():
         dt = rl.get_frame_time()
         game.update(dt)
         rl.begin_drawing()
