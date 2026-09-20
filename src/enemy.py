@@ -19,6 +19,7 @@ class Enemy(GameObject):
         self.health = enemy["health"]
         self.hit_frames = 0.0
         self.bonus_chance = enemy["bonus_chance"]
+        self.bonus_count = max(1, enemy["bonus_count"])
         self.score = enemy["score"]
         self.shadow = Shadow(enemy["texture"], 3)
 
@@ -37,7 +38,7 @@ class Enemy(GameObject):
         super().draw()
 
     def hit(self) -> list[Bonus]:
-        if self.y < self.height():
+        if self.is_destroyed or self.y < self.height():
             return []
 
         self.health -= 1
@@ -48,8 +49,13 @@ class Enemy(GameObject):
             play_sound(AssetStore.get("destroy_sound"))
             self.is_destroyed = True
 
-            if random.randint(1, 100) <= self.bonus_chance:
-                bonuses.append(Bonus(self.x, self.y, self.score))
+            count = random.randint(1, self.bonus_count)
+
+            for _ in range(count):
+                if random.randint(1, 100) <= self.bonus_chance:
+                    x = self.x + random.randint(-20, 20)
+                    y = self.y + random.randint(-20, 20)
+                    bonuses.append(Bonus(x, y, self.score))
         else:
             play_sound(AssetStore.get("hit_sound"))
             self.hit_frames = 1
@@ -64,6 +70,7 @@ class Mob(Enemy):
     def __init__(self, enemy: EnemyType, emitter: BulletEmitter):
         super().__init__(enemy)
         self.emitter = emitter
+        self.x_dir = random.choice([-1, 1])
 
     @GameObject.x.setter
     def x(self, value):
@@ -79,11 +86,19 @@ class Mob(Enemy):
         super().update(dt)
         self.y += self.speed * dt
 
-        if self.position.y >= AREA_HEIGHT:
-            self.is_destroyed = True
+        if self.enemy_data["behavior"] == "move":
+            if self.x >= AREA_WIDTH - self.width():
+                self.x_dir = -1
+            elif self.x <= self.width():
+                self.x_dir = 1
+
+            self.x += self.x_dir * (self.speed // 2) * dt
 
         if 0 < self.position.y < AREA_HEIGHT:
             self.emitter.update(dt)
+
+        if self.position.y >= AREA_HEIGHT:
+            self.is_destroyed = True
 
     def on_hit(self):
         self.x += random.randint(-3, 3)
@@ -144,4 +159,9 @@ class Boss(Enemy):
     def draw(self):
         super().draw()
         font = AssetStore.get("font")
-        rl.draw_text_ex(font, f"HP: {self.health}/{self.max_health}", (10, 10), 30, 3, rl.WHITE)
+        # rl.draw_text_ex(font, f"HP: {self.health}/{self.max_health}", (10, 10), 30, 3, rl.WHITE)
+
+        ratio = self.health / self.max_health
+        bar_width = AREA_WIDTH - 20
+        rl.draw_rectangle(10, 10, bar_width, 6, rl.GRAY)
+        rl.draw_rectangle(10, 10, int(bar_width * ratio), 6, rl.WHITE)

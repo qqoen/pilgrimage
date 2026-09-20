@@ -5,6 +5,14 @@ class Timeline:
         self._removed = []
         self._is_running = True
 
+    @property
+    def time(self):
+        return self._time
+
+    @property
+    def done(self):
+        return len(self._events) == 0
+
     def start(self):
         self._is_running = True
 

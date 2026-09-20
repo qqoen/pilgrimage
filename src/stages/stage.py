@@ -14,12 +14,42 @@ from src.sprite import AnimatedSprite
 from src.common import Timeline, Timer
 
 
+class SpellCard:
+    def __init__(self):
+        self.tint = rl.color_alpha(rl.WHITE, 0.75)
+        self.texture = AssetStore.get("spell")
+        self.start_x = AREA_WIDTH - 100
+        self.end_x = AREA_WIDTH - self.texture.width - 50
+        self.x = self.start_x
+        self.y = AREA_HEIGHT - self.texture.height
+        self.speed = 200
+        self.is_visible = False
+
+    def show(self):
+        self.is_visible = True
+        self.x = self.start_x
+
+    def update(self, dt):
+        if not self.is_visible:
+            return
+
+        self.x -= self.speed * dt
+
+        if self.x <= self.end_x:
+            self.is_visible = False
+
+    def draw(self):
+        if self.is_visible:
+            rl.draw_texture(self.texture, int(self.x), self.y, self.tint)
+
+
 class TitleCard:
     def __init__(self):
         self._title = ""
-        self._count = 3
+        self._count = 0
 
     def show(self, title):
+        self._count = 3
         self._title = title
 
     def update(self, dt):
@@ -41,8 +71,10 @@ class TitleCard:
 class Stage:
     def __init__(self, bg: Background, music: str, stage_name: str):
         self.music: rl.Music = AssetStore.get(music)
+        rl.set_music_volume(self.music, 0.5)
+
         self.stage_name = stage_name
-        self.name_timer = Timer(2, True)
+        self.name_timer = Timer(2)
 
         player_sprite = AnimatedSprite([
             "player1",
@@ -60,8 +92,14 @@ class Stage:
         self.tl = Timeline()
         self.bg = bg
         self.title_card = TitleCard()
+        self.spell_card = SpellCard()
+
+    @property
+    def done(self):
+        return len(self.bonuses) == 0 and len(self.enemies) == 0 and self.tl.done
 
     def update(self, dt):
+        rl.update_music_stream(self.music)
         self.player.update(dt)
         self.bg.update(dt)
         self.tl.update(dt)
@@ -72,7 +110,7 @@ class Stage:
                     bullet.is_destroyed = True
                     self.hit_enemy(enemy)
 
-        self.check_player_collisions()
+        self.check_player_collisions(dt)
 
         update_list(self.enemies, dt)
         update_list(self.explosions, dt)
@@ -80,15 +118,32 @@ class Stage:
         update_list(self.enemy_bullets, dt)
         self.title_card.update(dt)
         self.name_timer.update(dt)
+        self.spell_card.update(dt)
+
+        # if rl.is_key_pressed(raylib.KEY_X):
+        #     self.spell_card.show()
 
         if len(self.enemies) == 0:
             self.tl.start()
 
-    def check_player_collisions(self):
+    def start(self):
+        rl.play_music_stream(self.music)
+        self.name_timer.start()
+
+    def stop(self):
+        rl.stop_music_stream(self.music)
+
+    def check_player_collisions(self, dt):
         if not self.player.is_visible:
             return
 
         for bonus in self.bonuses:
+            if bonus.is_near(self.player):
+                new_pos = rl.vector2_move_towards(bonus.position, self.player.position, 400 * dt)
+                bonus.position.x = new_pos.x
+                if new_pos.y > bonus.position.y:
+                    bonus.position.y = new_pos.y
+
             if bonus.is_hit(self.player):
                 bonus.pick()
                 self.score += bonus.score
@@ -147,7 +202,6 @@ class Stage:
             case "fork": return ForkEmitter(self.enemy_bullets, "bullet", enemy["cooldown"])
             case "shotgun": return ShotgunEmitter(self.enemy_bullets, "bullet", enemy["cooldown"])
             case "circle": return CircleEmitter(self.enemy_bullets, "bullet", enemy["cooldown"])
-            case "boss1": return Boss1Emitter(self.enemy_bullets, "bullet", enemy["cooldown"])
             case _: return EmptyEmitter()
 
     def draw(self):
@@ -161,6 +215,7 @@ class Stage:
         draw_list(self.enemy_bullets)
 
         self.title_card.draw()
+        self.spell_card.draw()
 
         if not self.name_timer.finished:
             font = AssetStore.get("font")

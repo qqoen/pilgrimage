@@ -22,7 +22,7 @@ class AssetStore:
 
     @staticmethod
     def load_font(key, file_name):
-        font = rl.load_font(os.path.join("assets", file_name))
+        font = rl.load_font(os.path.join("assets", "fonts", file_name))
         AssetStore._assets[key] = font
 
     @staticmethod

@@ -32,26 +32,23 @@ def main():
 
 
 def load_assets():
-    AssetStore.load_texture("player1", "player1.png")
-    AssetStore.load_texture("player2", "player2.png")
-    AssetStore.load_texture("player3", "player3.png")
-    AssetStore.load_texture("player4", "player4.png")
+    AssetStore.load_texture("player1", "new_player1.png")
+    AssetStore.load_texture("player2", "new_player1.png")
+    AssetStore.load_texture("player3", "new_player1.png")
+    AssetStore.load_texture("player4", "new_player1.png")
 
-    AssetStore.load_texture("blue_fairy", "blue_fairy.png")
-    AssetStore.load_texture("red_fairy", "red_fairy.png")
-    AssetStore.load_texture("green_fairy", "green_fairy.png")
+    AssetStore.load_texture("mushroom", "mushroom.png")
+    AssetStore.load_texture("mushroom2", "mushroom2.png")
     AssetStore.load_texture("boss1", "boss1.png")
 
-    AssetStore.load_texture("checkers_bg", "tile1.png")
-    AssetStore.load_texture("mossy_bg", "mossy.png")
-    AssetStore.load_texture("grass_bg", "grass.png")
-    AssetStore.load_texture("grass2_bg", "grass2.png")
-    AssetStore.load_texture("grass3_bg", "grass3.png")
-    AssetStore.load_texture("stage2bg", "stage2.png")
-    AssetStore.load_texture("stage3bg", "Puffy_Sky-Night_01-512x512.png")
+    AssetStore.load_texture("grass_bg", "bluegrass1.png")
+    AssetStore.load_texture("grass2_bg", "bluegrass2.png")
+    AssetStore.load_texture("grass3_bg", "bluegrass3.png")
 
-    AssetStore.load_texture("bullet", "red_bullet.png")
-    AssetStore.load_texture("player_bullet", "plr_bullet.png")
+    AssetStore.load_texture("spell", "spell_lowres.png")
+
+    AssetStore.load_texture("bullet", "spore_bullet.png")
+    AssetStore.load_texture("player_bullet", "flower_bullet.png")
     AssetStore.load_texture("bonus", "bonus.png")
 
     AssetStore.load_music("stage2music", "05. Long Journey.ogg")
@@ -61,6 +58,7 @@ def load_assets():
     AssetStore.load_sound("hit_sound", "Hit2.wav")
     AssetStore.load_sound("destroy_sound", "Boom7.wav")
     AssetStore.load_sound("pickup", "Pickup11.wav")
+    AssetStore.load_sound("enemy_shot", "enemy_shot.wav")
 
     AssetStore.load_font("font", "Chewy-Regular.ttf")
 

@@ -78,12 +78,12 @@ class Sprite(Graphics):
 
 class Shadow:
     def __init__(self, texture, texture_scale):
-        self.sprite = Sprite(AssetStore.get(texture), texture_scale, rl.fade(rl.BLACK, 0.5))
+        self.sprite = Sprite(AssetStore.get(texture), texture_scale, rl.fade(rl.BLACK, 0.25))
         self.position = rl.Vector2()
 
     def update(self, dt, target):
         self.position.x = target.x
-        self.position.y = target.y + 25
+        self.position.y = target.y + 30
 
     def draw(self):
         self.sprite.draw(self.position.x, self.position.y)

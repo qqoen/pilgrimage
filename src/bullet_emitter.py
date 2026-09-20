@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from src.bullet import Bullet
 from src.sprite import Sprite
 from src.asset_store import AssetStore
+from src.utils import play_sound
 
 
 BULLET_RADIUS = 6
@@ -29,9 +30,12 @@ class BulletEmitter(ABC):
 
         self.emit_timer -= dt
 
+    def create_bullet(self, direction: rl.Vector2, speed: float):
+        return Bullet(Sprite(AssetStore.get(self.texture), 3), rl.vector2_normalize(direction), speed, BULLET_RADIUS)
+
     @abstractmethod
     def emit(self, **kwargs):
-        pass
+        play_sound(AssetStore.get("enemy_shot"))
 
 
 class EmptyEmitter(BulletEmitter):
@@ -48,8 +52,8 @@ class SingleEmitter(BulletEmitter):
         self.bullet_speed = bullet_speed
 
     def emit(self, **kwargs):
-        direction = rl.Vector2(0, 1)
-        bullet = Bullet(Sprite(AssetStore.get(self.texture), 1), direction, self.bullet_speed, BULLET_RADIUS)
+        super().emit(**kwargs)
+        bullet = self.create_bullet(rl.Vector2(0, 1), self.bullet_speed)
         bullet.position.x = self.position.x
         bullet.position.y = self.position.y
         self.bullets.append(bullet)
@@ -57,12 +61,13 @@ class SingleEmitter(BulletEmitter):
 
 class ForkEmitter(BulletEmitter):
     def emit(self, **kwargs):
+        super().emit(**kwargs)
         speed = kwargs.get("speed", 300)
         self.spawn_bullet(rl.Vector2(0.15, 1), speed)
         self.spawn_bullet(rl.Vector2(-0.15, 1), speed)
 
     def spawn_bullet(self, direction, speed):
-        bullet = Bullet(Sprite(AssetStore.get(self.texture), 1), rl.vector2_normalize(direction), speed, BULLET_RADIUS)
+        bullet = self.create_bullet(direction, speed)
         bullet.position.x = self.position.x
         bullet.position.y = self.position.y
         self.bullets.append(bullet)
@@ -73,14 +78,14 @@ class ShotgunEmitter(BulletEmitter):
         super().__init__(bullets, texture, cd)
 
     def emit(self, **kwargs):
+        super().emit(**kwargs)
         amount = kwargs.get("amount", 15)
 
         for _ in range(amount):
             dx = random.uniform(-1, 1)
             dy = random.uniform(-1, 1)
-            direction = rl.vector2_normalize(rl.Vector2(dx, dy))
             speed = random.randint(200, 300)
-            bullet = Bullet(Sprite(AssetStore.get(self.texture)), direction, speed, BULLET_RADIUS)
+            bullet = self.create_bullet(rl.Vector2(dx, dy), speed)
             bullet.position.x = self.position.x
             bullet.position.y = self.position.y
             self.bullets.append(bullet)
@@ -91,6 +96,7 @@ class CircleEmitter(BulletEmitter):
         super().__init__(bullets, texture, cd)
 
     def emit(self, **kwargs):
+        super().emit(**kwargs)
         amount = kwargs.get("amount", 13)
         times = kwargs.get("times", 3)
         speed = kwargs.get("speed", 200)
@@ -99,32 +105,11 @@ class CircleEmitter(BulletEmitter):
         for i in range(amount):
             for x in range(times):
                 angle = math.radians((360 / amount) * i)
-                direction = rl.vector2_normalize(rl.vector2_rotate(start_v, angle))
-
-                bullet = Bullet(Sprite(AssetStore.get(self.texture)), direction, speed + 50 * x, BULLET_RADIUS)
+                direction = rl.vector2_rotate(start_v, angle)
+                bullet = self.create_bullet(direction, speed + 50 * x)
                 bullet.position.x = self.position.x
                 bullet.position.y = self.position.y
                 self.bullets.append(bullet)
-
-
-class Boss1Emitter(BulletEmitter):
-    def __init__(self, bullets, texture, cd):
-        super().__init__(bullets, texture, 0.5)
-        self.shotgun = ShotgunEmitter(bullets, texture, cd)
-        self.circle = CircleEmitter(bullets, texture, cd)
-        self.count = 1
-
-    def move(self, x, y):
-        super().move(x, y)
-        self.shotgun.move(x, y)
-        self.circle.move(x, y)
-
-    def emit(self, **kwargs):
-        if self.count % 2 == 0:
-            self.shotgun.emit()
-        else:
-            self.circle.emit()
-        self.count += 1
 
 
 # class SpiralEmitter(BulletEmitter):

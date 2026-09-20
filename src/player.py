@@ -40,11 +40,12 @@ class Trail:
 class Player(GameObject):
     def __init__(self, sprite: AnimatedSprite):
         super().__init__(sprite, 6)
-        self.bullet_sprite = Sprite(AssetStore.get("player_bullet"), 3, rl.GRAY)
+        self.bullet_sprite = Sprite(AssetStore.get("player_bullet"), 3)
         self.speed = 410
         self.bullets: list[Bullet] = []
         self.shot_cooldown: float = 0
         self.lives = 3
+        self.spells = 3
         self.trail = Trail()
         self.shadow = Shadow("player1", 3)
 
@@ -130,6 +131,9 @@ class Player(GameObject):
         self._respawn_timer.start()
         self._invincible_timer.start()
         play_sound(AssetStore.get("destroy_sound"))
+
+    def use_spell(self):
+        self.spells -= 1
 
     def draw(self):
         if self.is_visible:

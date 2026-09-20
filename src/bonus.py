@@ -1,3 +1,4 @@
+import pyray as rl
 from src.game_object import GameObject
 from src.sprite import Sprite
 from src.asset_store import AssetStore
@@ -15,6 +16,10 @@ class Bonus(GameObject):
         self.acceleration = 150
         self.is_destroyed = False
         self.frame_count = 0
+        self.attract_radius = self.hit_radius * 3
+
+    def is_near(self, other: GameObject):
+        return rl.check_collision_circles(self.position, self.attract_radius, other.position, other.hit_radius)
 
     def update(self, dt):
         self.position.y += self.speed * dt
