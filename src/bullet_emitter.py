@@ -6,6 +6,7 @@ from src.bullet import Bullet
 from src.sprite import Sprite
 from src.asset_store import AssetStore
 from src.utils import play_sound
+from typing import Callable
 
 
 BULLET_RADIUS = 6
@@ -59,6 +60,21 @@ class SingleEmitter(BulletEmitter):
         self.bullets.append(bullet)
 
 
+class SingleAimedEmitter(BulletEmitter):
+    def __init__(self, bullets, texture, cooldown, get_player_position: Callable):
+        super().__init__(bullets, texture, cooldown)
+        self.get_player_position = get_player_position
+
+    def emit(self, **kwargs):
+        super().emit(**kwargs)
+        player_position = self.get_player_position()
+        direction = rl.vector2_subtract(player_position, self.position)
+        bullet = self.create_bullet(direction, 300)
+        bullet.position.x = self.position.x
+        bullet.position.y = self.position.y
+        self.bullets.append(bullet)
+
+
 class ForkEmitter(BulletEmitter):
     def emit(self, **kwargs):
         super().emit(**kwargs)
@@ -98,7 +114,7 @@ class CircleEmitter(BulletEmitter):
     def emit(self, **kwargs):
         super().emit(**kwargs)
         amount = kwargs.get("amount", 13)
-        times = kwargs.get("times", 3)
+        times = kwargs.get("times", 1)
         speed = kwargs.get("speed", 200)
         start_v = rl.Vector2(1, 0)
 

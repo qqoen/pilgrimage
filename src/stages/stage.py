@@ -197,8 +197,11 @@ class Stage:
         self.tl.stop()
 
     def create_emitter(self, enemy: EnemyType):
+        get_player_position = lambda: self.player.position
+
         match enemy["emitter"]:
             case "single": return SingleEmitter(self.enemy_bullets, "bullet", enemy["cooldown"], enemy["speed"] + 100)
+            case "single_aimed": return SingleAimedEmitter(self.enemy_bullets, "bullet", enemy["cooldown"], get_player_position)
             case "fork": return ForkEmitter(self.enemy_bullets, "bullet", enemy["cooldown"])
             case "shotgun": return ShotgunEmitter(self.enemy_bullets, "bullet", enemy["cooldown"])
             case "circle": return CircleEmitter(self.enemy_bullets, "bullet", enemy["cooldown"])

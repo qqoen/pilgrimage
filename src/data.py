@@ -25,6 +25,19 @@ ENEMIES: dict[str, EnemyType] = {
         "score": 30,
         "behavior": "move",
     },
+
+    "mushroom2": {
+        "texture": "mushroom",
+        "speed": 150,
+        "health": 3,
+        "emitter": "single_aimed",
+        "cooldown": 3,
+        "bonus_chance": 50,
+        "bonus_count": 3,
+        "score": 40,
+        "behavior": "",
+    },
+
     "fairy2": {
         "texture": "mushroom2",
         "speed": 150,
@@ -36,6 +49,20 @@ ENEMIES: dict[str, EnemyType] = {
         "score": 60,
         "behavior": "",
     },
+
+    "red_mushroom2": {
+        "texture": "mushroom2",
+        "speed": 150,
+        "health": 7,
+        "emitter": "circle",
+        "cooldown": 2,
+        "bonus_chance": 75,
+        "bonus_count": 4,
+        "score": 60,
+        "behavior": "",
+    },
+
+
     "boss1": {
         "texture": "boss1",
         "speed": 275,

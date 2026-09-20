@@ -17,8 +17,17 @@ class Stage2(Stage):
         def add(time, func):
             self.tl.add(offset + time, func)
 
-        add(1, lambda: self.spawn("fairy", lane=1))
-        add(1.5, lambda: self.spawn("fairy", lane=2))
-        add(2, lambda: self.spawn("fairy", lane=3))
-        add(2.5, lambda: self.spawn("fairy", lane=4))
-        add(3, lambda: self.spawn("fairy", lane=5))
+        add(1, lambda: self.spawn("mushroom2", lane=1))
+        add(1.5, lambda: self.spawn("mushroom2", lane=2))
+        add(2, lambda: self.spawn("mushroom2", lane=3))
+        add(2.5, lambda: self.spawn("mushroom2", lane=4))
+        add(3, lambda: self.spawn("mushroom2", lane=5))
+
+        add(5, lambda: self.spawn("mushroom2", lane=5))
+        add(5.5, lambda: self.spawn("mushroom2", lane=4))
+        add(6, lambda: self.spawn("mushroom2", lane=3))
+        add(6.5, lambda: self.spawn("mushroom2", lane=2))
+        add(7, lambda: self.spawn("mushroom2", lane=1))
+
+        add(10, lambda: self.spawn("red_mushroom2", lane=1))
+        add(11, lambda: self.spawn("red_mushroom2", lane=5))

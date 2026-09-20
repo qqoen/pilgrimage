@@ -94,7 +94,7 @@ class Mob(Enemy):
 
             self.x += self.x_dir * (self.speed // 2) * dt
 
-        if 0 < self.position.y < AREA_HEIGHT:
+        if 0 < self.position.y < (AREA_HEIGHT // 3) * 2:
             self.emitter.update(dt)
 
         if self.position.y >= AREA_HEIGHT:
